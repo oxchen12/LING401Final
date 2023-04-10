@@ -1,7 +1,12 @@
+from __future__ import annotations
 import nltk
 import re
+from dataclasses import dataclass
+from enum import Enum, auto
 
-ENTRIES = nltk.corpus.cmudict.entries()
+CMU_ENTRIES = nltk.corpus.cmudict.entries()
+CMU_DICT = nltk.corpus.cmudict.dict()
+
 ARPA_DICT = {
     "AA": "a",
     "AE": "\u00e6",
@@ -47,10 +52,14 @@ ARPA_DICT = {
 }
 
 
+def split_segment(segment: str) -> (str, str):
+    return re.findall(r"^([A-Z]+)([0-2]?)$", segment)[0]
+
+
 def arpa_to_ipa(arpa: list[str]):
     buf = ""
     for seg in arpa:
-        phon, stress = re.findall(r"^([A-Z]+)([0-2]?)$", seg)[0]
+        phon, stress = split_segment(seg)
         if stress == "1":
             buf += "\u02C8"
         elif stress == "2":
