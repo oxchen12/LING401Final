@@ -9,5 +9,4 @@ Final project for LING 401 Language and Computers.
 
 ## Dependencies
 
-* Python packages
-  * `datasets`
+* `nltk`
