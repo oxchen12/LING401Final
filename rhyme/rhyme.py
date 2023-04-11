@@ -12,9 +12,22 @@ class RhymeType(Enum):
 
 
 def is_rhyme(a: str, b: str) -> bool:
+    """
+    Checks if two words rhyme.
+
+    :param a: the first word to be checked
+    :param b: the second word to be checked
+    :return: false if either word is not in the CMU dictionary
+             false if the words do not rhyme
+             true if the words rhyme
+    """
+    if a not in rhyme.CMU_DICT or b not in rhyme.CMU_DICT:
+        return False
+
     found_stress = False
 
-    for a_phon, b_phon in zip(reversed(rhyme.CMU_DICT[a][0]), reversed(rhyme.CMU_DICT[b][0])):
+    for a_phon, b_phon in zip(
+            reversed(rhyme.CMU_DICT[a][0]), reversed(rhyme.CMU_DICT[b][0])):
         if found_stress:
             return a_phon != b_phon
 
@@ -29,6 +42,13 @@ def is_rhyme(a: str, b: str) -> bool:
 
 
 def rhyme_type(a: str, b: str) -> RhymeType:
+    """
+    Checks the perfect rhyme type between two words
+
+    :param a: the first word to be checked
+    :param b: the second word to be checked
+    :return: the RhymeType corresponding to the rhyme type
+    """
     if not is_rhyme(a, b):
         return RhymeType.NO_RHYME
 
