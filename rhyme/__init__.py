@@ -1,8 +1,6 @@
 from __future__ import annotations
 import nltk
 import re
-from dataclasses import dataclass
-from enum import Enum, auto
 
 CMU_ENTRIES = nltk.corpus.cmudict.entries()
 CMU_DICT = nltk.corpus.cmudict.dict()

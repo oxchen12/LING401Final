@@ -1,9 +1,6 @@
 from __future__ import annotations
-from __init__ import CMU_DICT
-import nltk
-import re
-from dataclasses import dataclass
 from enum import Enum, auto
+import rhyme
 
 
 class RhymeType(Enum):
@@ -17,7 +14,7 @@ class RhymeType(Enum):
 def is_rhyme(a: str, b: str) -> bool:
     found_stress = False
 
-    for a_phon, b_phon in zip(reversed(CMU_DICT[a][0]), reversed(CMU_DICT[b][0])):
+    for a_phon, b_phon in zip(reversed(rhyme.CMU_DICT[a][0]), reversed(rhyme.CMU_DICT[b][0])):
         if found_stress:
             return a_phon != b_phon
 
@@ -37,7 +34,7 @@ def rhyme_type(a: str, b: str) -> RhymeType:
 
     found_stress = False
     syll_count = 0
-    for phon in CMU_DICT[a][0]:
+    for phon in rhyme.CMU_DICT[a][0]:
         if phon[-1] == "1":
             found_stress = True
 

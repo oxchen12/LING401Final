@@ -3,7 +3,6 @@ import gzip
 import json
 import sys
 import logging
-from pprint import pprint
 
 data = None
 logging.basicConfig(format='%(levelname)s: %(message)s',
