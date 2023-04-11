@@ -1,10 +1,12 @@
 from __future__ import annotations
+
+from dataclasses import dataclass
+
 import nltk
 import re
 
 CMU_ENTRIES = nltk.corpus.cmudict.entries()
 CMU_DICT = nltk.corpus.cmudict.dict()
-
 ARPA_DICT = {
     "AA": "a",
     "AE": "\u00e6",
@@ -50,17 +52,40 @@ ARPA_DICT = {
 }
 
 
-def split_segment(segment: str) -> (str, str):
-    return re.findall(r"^([A-Z]+)([0-2]?)$", segment)[0]
+@dataclass
+class Segment:
+    phone: str
+    stress: int
+
+    @staticmethod
+    def from_str(s: str):
+        """
+        Factory method for creating segments from ARPA format.
+
+        :param s:
+        :return:
+        """
+
+        split = re.findall(r"^([A-Z]+)([0-2]?)$", s)[0]
+        if not s:
+            return None
+
+        return Segment(s[0], 0 if not s else int(s))
 
 
-def arpa_to_ipa(arpa: list[str]):
-    buf = ""
+def arpa_to_ipa(arpa: list[str]) -> str:
+    """
+    Converts an ARPA word into Unicode-formatted IPA.
+
+    :param arpa: the ARPA formatted segments of the word
+    :return: Unicode-formatted IPA string representation of the word
+    """
+    buf = []
     for seg in arpa:
-        phon, stress = split_segment(seg)
-        if stress == "1":
-            buf += "\u02C8"
-        elif stress == "2":
-            buf += "\u02CC"
-        buf += ARPA_DICT[phon]
-    return buf
+        seg = Segment.from_str(seg)
+        if seg.stress == 1:
+            buf.append("\u02C8")
+        elif seg.stress == 2:
+            buf.append("\u02CC")
+        buf.append(ARPA_DICT[seg.phone])
+    return "".join(buf)
