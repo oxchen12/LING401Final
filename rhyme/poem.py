@@ -4,15 +4,15 @@ import json
 import sys
 import logging
 
-data = None
+data = []
 logging.basicConfig(format='%(levelname)s: %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
 
 
-def init_data():
+def _init_data():
     """
-    Fetches poem data from the Gutenberg corpus.
+    Fetches poem data from the Gutenberg corpus and stores in in the global data.
 
     :return: None
     """
@@ -33,7 +33,7 @@ def get(gid: int):
     """
     # could optimize since objs are returned in gid order
     global data
-    init_data()
+    _init_data()
     for obj in data:
         if int(obj["gid"]) != gid:
             continue

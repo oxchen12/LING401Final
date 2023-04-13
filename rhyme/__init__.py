@@ -57,20 +57,22 @@ class Segment:
     phone: str
     stress: int
 
-    @staticmethod
-    def from_str(s: str):
+    @classmethod
+    def from_str(cls, s: str):
         """
         Factory method for creating segments from ARPA format.
 
-        :param s:
-        :return:
+        :param s: the ARPA segment as a string
+        :return: a new Segment object with the corresponding data
         """
 
         split = re.findall(r"^([A-Z]+)([0-2]?)$", s)[0]
-        if not s:
+        if not split:
             return None
 
-        return Segment(s[0], 0 if not s else int(s))
+        ph, st = split
+
+        return cls(ph, 0 if not st else int(st))
 
 
 def arpa_to_ipa(arpa: list[str]) -> str:
