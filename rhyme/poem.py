@@ -17,7 +17,7 @@ def _init_data():
     :return: None
     """
     global data
-    if data is None:
+    if not data:
         with urllib.request.urlopen('http://static.decontextualize.com/gutenberg-poetry-v001.ndjson.gz') as fp:
             with gzip.open(fp) as d:
                 data = [json.loads(line) for line in d]
