@@ -94,6 +94,8 @@ def annotate_rhymes(lines: Iterable[str], names_gen=_names):
     names = names_gen()
     for line in lines:
         last = last_word(line)
+        if last is None:
+            continue
         cur_set = None
         for rep, rset in rhyme_sets.items():  # check existing RhymeSets for match
             if is_rhyme(rep, last):
