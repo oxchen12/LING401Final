@@ -1,6 +1,8 @@
 from __future__ import annotations
 from enum import Enum, auto
-from __init__ import *
+from rhymeutil import *
+
+
 class RhymeType(Enum):
     SINGLE = auto()
     DOUBLE = auto()
@@ -11,7 +13,7 @@ class RhymeType(Enum):
 
 def is_rhyme(a: str, b: str) -> bool:
     """
-    Checks if two words rhyme.
+    Checks if two words form a perfect rhyme.
 
     :param a: the first word to be checked
     :param b: the second word to be checked
@@ -36,7 +38,7 @@ def is_rhyme(a: str, b: str) -> bool:
             # primary stress found, we done
             found_stress = True
 
-    return False  # dummy value, should never occur
+    return True
 
 
 def rhyme_type(a: str, b: str) -> RhymeType:
@@ -52,18 +54,18 @@ def rhyme_type(a: str, b: str) -> RhymeType:
 
     found_stress = False
     syll_count = 0
-    for phon in rhyme_util.CMU_DICT[a][0]:
+    for phon in CMU_DICT[a][0]:
         if phon[-1] == "1":
             found_stress = True
 
         if found_stress and not phon[-1].isalpha():
             syll_count += 1
 
-    if (syll_count == 0):
+    if syll_count == 0:
         return RhymeType.SINGLE
-    elif(syll_count == 1):
+    elif syll_count == 1:
         return RhymeType.DOUBLE
-    elif (syll_count == 2):
+    elif syll_count == 2:
         return RhymeType.DACTYLIC
     else:
         # WTF
