@@ -1,8 +1,6 @@
 from __future__ import annotations
 from enum import Enum, auto
-import rhyme
-
-
+from __init__ import *
 class RhymeType(Enum):
     SINGLE = auto()
     DOUBLE = auto()
@@ -21,13 +19,13 @@ def is_rhyme(a: str, b: str) -> bool:
              false if the words do not rhyme
              true if the words rhyme
     """
-    if a not in rhyme.CMU_DICT or b not in rhyme.CMU_DICT:
+    if a not in CMU_DICT or b not in CMU_DICT:
         return False
 
     found_stress = False
 
     for a_phon, b_phon in zip(
-            reversed(rhyme.CMU_DICT[a][0]), reversed(rhyme.CMU_DICT[b][0])):
+            reversed(CMU_DICT[a][0]), reversed(CMU_DICT[b][0])):
         if found_stress:
             return a_phon != b_phon
 
@@ -54,20 +52,19 @@ def rhyme_type(a: str, b: str) -> RhymeType:
 
     found_stress = False
     syll_count = 0
-    for phon in rhyme.CMU_DICT[a][0]:
+    for phon in rhyme_util.CMU_DICT[a][0]:
         if phon[-1] == "1":
             found_stress = True
 
         if found_stress and not phon[-1].isalpha():
             syll_count += 1
 
-    match syll_count:
-        case 0:
-            return RhymeType.SINGLE
-        case 1:
-            return RhymeType.DOUBLE
-        case 2:
-            return RhymeType.DACTYLIC
-        case _:
-            # WTF
-            return RhymeType.OTHER
+    if (syll_count == 0):
+        return RhymeType.SINGLE
+    elif(syll_count == 1):
+        return RhymeType.DOUBLE
+    elif (syll_count == 2):
+        return RhymeType.DACTYLIC
+    else:
+        # WTF
+        return RhymeType.OTHER
