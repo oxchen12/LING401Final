@@ -15,7 +15,7 @@ class RhymeType(Enum):
 
 def is_rhyme(a: str, b: str) -> bool:
     """
-    Checks if two words form a perfect rhyme.
+    Checks if any pronunciation of two words form a perfect rhyme.
 
     :param a: the first word to be checked
     :param b: the second word to be checked
@@ -30,7 +30,35 @@ def is_rhyme(a: str, b: str) -> bool:
                for a_pron, b_pron in product(CMU_DICT[a], CMU_DICT[b]))
 
 
-def is_rhyme_prons(a_pron, b_pron) -> bool:
+def get_rhyme_prons(a: str, b: str):
+    """
+    Retrieves the rhyming pronunciations of the two words.
+
+    :param a: the first word to be checked
+    :param b: the first word to be checked
+    :return: None if either word is not in the CMU dictionary
+             None if the words do not rhyme
+             2-tuple of ARPA pronunciations if the words rhyme
+    """
+    if a not in CMU_DICT or b not in CMU_DICT:
+        return None
+
+    for a_pron, b_pron in product(CMU_DICT[a], CMU_DICT[b]):
+        if is_rhyme_prons(a_pron, b_pron):
+            return a_pron, b_pron
+
+    return None
+
+
+def is_rhyme_prons(a_pron: str, b_pron: str) -> bool:
+    """
+    Checks if two pronunciations form a perfect rhyme.
+
+    :param a_pron: the first pronunciation to be checked
+    :param b_pron: the second pronunciation to be checked
+    :return: false if the words do not rhyme
+             true if the words rhyme
+    """
     phon_pairs = zip(reversed(a_pron), reversed(b_pron))
 
     found_stress = False
@@ -49,10 +77,18 @@ def is_rhyme_prons(a_pron, b_pron) -> bool:
 
 
 def is_rhyme_pron_word(pron, word) -> bool:
-    if b not in CMU_DICT:
+    """
+    Checks if a single pronunciation rhymes with any of a word's pronunciation
+
+    :param pron: the pronunciation to be checked
+    :param word: the word to be checked
+    :return: false if the pronunciation does not rhyme with the word
+             true if the pronunciation rhymes with the word
+    """
+    if word not in CMU_DICT:
         return False
-    
-    return any(is_rhyme_prons(pron, w_pron) 
+
+    return any(is_rhyme_prons(pron, w_pron)
                for w_pron in CMU_DICT[word])
 
 

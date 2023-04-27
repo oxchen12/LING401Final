@@ -8,7 +8,7 @@ Created on Sun Apr 23 20:46:21 2023
 
 import nltk
 from rhymeutil import poem
-from rhymeutil.rhyme import is_rhyme, rhyme_type, RhymeType
+from rhymeutil.rhyme import *
 from nltk.tokenize import word_tokenize
 from typing import Iterable
 import string
@@ -19,6 +19,7 @@ class RhymeSet:
 
     def __init__(self, rep: str, id_: str = None):
         self.rep = rep
+        self.pron = None
         self.id_ = id_
         self.words = set(rep)
         self.type = RhymeType.UNDETERMINED
@@ -32,8 +33,17 @@ class RhymeSet:
         return self.__repr__()
 
     def add(self, word: str) -> bool:
-        if not is_rhyme(self.rep, word):
-            return False
+        if self.pron is not None:
+            # representative pronunciation exists
+            if not is_rhyme_pron_word(self.pron, word):
+                return False
+        else:
+            # representative pronuciation does not exist
+            res = get_rhyme_prons(self.rep, word)
+            if res is None:
+                return False
+            # rhyming pronunciations found
+            self.pron = res[0]
         if self.type == RhymeType.UNDETERMINED:
             self.type = rhyme_type(self.rep, word)
         self.words.add(word)
@@ -93,7 +103,7 @@ def annotate_rhymes(lines: Iterable[str], names_gen=_names):
              a dictionary containing representative member keys and RhymeSet values
     """
     rhyme_sets = dict()
-    annotations = []  # index i contains a tuple of line i and the RhymeSet for that line
+    annotations_ = []  # index i contains a tuple of line i and the RhymeSet for that line
     names = names_gen()
     for line in lines:
         last = last_word(line)
@@ -109,5 +119,5 @@ def annotate_rhymes(lines: Iterable[str], names_gen=_names):
             rhyme_sets[last] = cur_set
         else:
             cur_set.add(last)
-        annotations.append((line, cur_set))
-    return annotations, rhyme_sets
+        annotations_.append((line, cur_set))
+    return annotations_, rhyme_sets
