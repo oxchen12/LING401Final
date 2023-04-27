@@ -8,7 +8,7 @@ Created on Sun Apr 23 20:46:21 2023
 
 import nltk
 from rhymeutil import poem
-from rhymeutil.rhyme import is_rhyme
+from rhymeutil.rhyme import is_rhyme, rhyme_type
 from nltk.tokenize import word_tokenize
 from typing import Iterable
 import string
@@ -35,6 +35,10 @@ class RhymeSet:
             return False
         self.words.add(word)
         return True
+
+    @property
+    def type(self):
+        return rhyme_type(self.rep, self.rep)
 
 
 def last_word(line: str):
