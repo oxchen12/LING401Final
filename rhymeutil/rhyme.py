@@ -30,7 +30,7 @@ def is_rhyme(a: str, b: str) -> bool:
                for a_pron, b_pron in product(CMU_DICT[a], CMU_DICT[b]))
 
 
-def is_rhyme_prons(a_pron, b_pron):
+def is_rhyme_prons(a_pron, b_pron) -> bool:
     phon_pairs = zip(reversed(a_pron), reversed(b_pron))
 
     found_stress = False
@@ -46,6 +46,14 @@ def is_rhyme_prons(a_pron, b_pron):
             found_stress = True
 
     return len(a_pron) != len(b_pron)  # words do not rhyme with themselves
+
+
+def is_rhyme_pron_word(pron, word) -> bool:
+    if b not in CMU_DICT:
+        return False
+    
+    return any(is_rhyme_prons(pron, w_pron) 
+               for w_pron in CMU_DICT[word])
 
 
 def rhyme_type(a: str, b: str) -> RhymeType:
