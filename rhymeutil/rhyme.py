@@ -1,6 +1,7 @@
 from __future__ import annotations
 from enum import Enum, auto
 from rhymeutil import *
+from itertools import product
 
 
 class RhymeType(Enum):
@@ -25,9 +26,11 @@ def is_rhyme(a: str, b: str) -> bool:
     if a not in CMU_DICT or b not in CMU_DICT:
         return False
 
-    a_pron = get_pron(a)
-    b_pron = get_pron(b)
+    return any(is_rhyme_prons(a_pron, b_pron)
+               for a_pron, b_pron in product(CMU_DICT[a], CMU_DICT[b]))
 
+
+def is_rhyme_prons(a_pron, b_pron):
     phon_pairs = zip(reversed(a_pron), reversed(b_pron))
 
     found_stress = False
