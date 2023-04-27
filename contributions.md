@@ -1,10 +1,10 @@
-Contributions
+# Contributions
 
-Oliver
+## Oliver
 * Fetching and loading Gutenberg Poetry Corpus data
 * Basic rhyming algorithms
 * Demo writeup
 
-Alexandra
+## Alexandra
 * Line-by-line annotating using RhymeSets
 * Rhyme scheme analysis
