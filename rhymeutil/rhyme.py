@@ -9,6 +9,7 @@ class RhymeType(Enum):
     DACTYLIC = auto()
     OTHER = auto()
     NO_RHYME = auto()
+    UNDETERMINED = auto()
 
 
 def is_rhyme(a: str, b: str) -> bool:

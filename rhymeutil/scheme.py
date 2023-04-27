@@ -8,7 +8,7 @@ Created on Sun Apr 23 20:46:21 2023
 
 import nltk
 from rhymeutil import poem
-from rhymeutil.rhyme import is_rhyme, rhyme_type
+from rhymeutil.rhyme import is_rhyme, rhyme_type, RhymeType
 from nltk.tokenize import word_tokenize
 from typing import Iterable
 import string
@@ -21,6 +21,7 @@ class RhymeSet:
         self.rep = rep
         self.id_ = id_
         self.words = set(rep)
+        self.type = RhymeType.UNDETERMINED
 
     def __repr__(self) -> str:
         return f"RhymeSet({self.rep}, {len(self.words)})"
@@ -33,12 +34,10 @@ class RhymeSet:
     def add(self, word: str) -> bool:
         if not is_rhyme(self.rep, word):
             return False
+        if self.type == RhymeType.UNDETERMINED:
+            self.type = rhyme_type(self.rep, word)
         self.words.add(word)
         return True
-
-    @property
-    def type(self):
-        return rhyme_type(self.rep, self.rep)
 
 
 def last_word(line: str):
