@@ -24,10 +24,13 @@ def is_rhyme(a: str, b: str) -> bool:
     if a not in CMU_DICT or b not in CMU_DICT:
         return False
 
-    found_stress = False
+    a_pron = get_pron(a)
+    b_pron = get_pron(b)
 
-    for a_phon, b_phon in zip(
-            reversed(CMU_DICT[a][0]), reversed(CMU_DICT[b][0])):
+    phon_pairs = zip(reversed(a_pron), reversed(b_pron))
+
+    found_stress = False
+    for a_phon, b_phon in phon_pairs:
         if found_stress:
             return a_phon != b_phon
 
@@ -38,7 +41,7 @@ def is_rhyme(a: str, b: str) -> bool:
             # primary stress found, we done
             found_stress = True
 
-    return True
+    return len(a_pron) != len(b_pron)  # words do not rhyme with themselves
 
 
 def rhyme_type(a: str, b: str) -> RhymeType:
@@ -54,12 +57,12 @@ def rhyme_type(a: str, b: str) -> RhymeType:
 
     found_stress = False
     syll_count = 0
-    for phon in CMU_DICT[a][0]:
-        if phon[-1] == "1":
-            found_stress = True
-
+    for phon in get_pron(a):
         if found_stress and not phon[-1].isalpha():
             syll_count += 1
+
+        if phon[-1] == "1":
+            found_stress = True
 
     if syll_count == 0:
         return RhymeType.SINGLE
