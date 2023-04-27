@@ -91,3 +91,7 @@ def arpa_to_ipa(arpa: list[str]) -> str:
             buf.append("\u02CC")
         buf.append(ARPA_DICT[seg.phone])
     return "".join(buf)
+
+
+def get_pron(word: str):
+    return CMU_DICT[word][0]
