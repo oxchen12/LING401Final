@@ -21,7 +21,7 @@ class RhymeSet:
         self.rep = rep
         self.pron = None
         self.id_ = id_
-        self.words = set(rep)
+        self.words = {rep}
         self.type = RhymeType.UNDETERMINED
 
     def __repr__(self) -> str:
